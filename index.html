@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Задание 6 WEB</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div class="form mt-4">
+        <h2 class="text-center mb-4">Регистрация</h2>
+        <form action="/index.php" method="POST" class="needs-validation" novalidate>
+            <div class="form-row">
+                <div class="col-md-12 mb-3">
+                    <label for="field-name-1">ФИО:</label>
+                    <input type="text" class="form-control" id="field-name-1" placeholder="Иванов Иван Иванович" required>
+                    <div class="invalid-feedback">Пожалуйста, введите ФИО.</div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-12 mb-3">
+                    <label for="field-tel">Номер телефона:</label>
+                    <input type="tel" class="form-control" id="field-tel" placeholder="Введите ваш номер" required>
+                    <div class="invalid-feedback">Пожалуйста, введите номер телефона.</div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-12 mb-3">
+                    <label for="field-email">Email:</label>
+                    <input type="email" class="form-control" id="field-email" placeholder="Введите вашу почту" required>
+                    <div class="invalid-feedback">Пожалуйста, введите корректный адрес электронной почты.</div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-12 mb-3">
+                    <label for="field-date">Дата рождения:</label>
+                    <input type="date" class="form-control" id="field-date" required>
+                    <div class="invalid-feedback">Пожалуйста, выберите дату рождения.</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Пол:</label>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="radio-group-1" id="radio-male" value="male" required>
+                    <label class="form-check-label" for="radio-male">Мужской</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="radio-group-1" id="radio-female" value="female" required>
+                    <label class="form-check-label" for="radio-female">Женский</label>
+                </div>
+                <div class="invalid-feedback">Пожалуйста, выберите пол.</div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-12 mb-3">
+                    <label for="field-name-4">Любимый язык программирования:</label>
+                    <select class="form-control" id="field-name-4" multiple required>
+                        <option value="Pascal">Pascal</option>
+                        <option value="C">C</option>
+                        <option value="C++">C++</option>
+                        <option value="JavaScript">JavaScript</option>
+                        <option value="PHP">PHP</option>
+                        <option value="Haskell">Haskell</option>
+                        <option value="Clojure">Clojure</option>
+                        <option value="Prolog">Prolog</option>
+                        <option value="Scala">Scala</option>
+                    </select>
+                    <div class="invalid-feedback">Пожалуйста, выберите хотя бы один язык программирования.</div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-12 mb-3">
+                    <label for="field-name-2">Биография:</label>
+                    <textarea class="form-control" id="field-name-2" rows="3" placeholder="Расскажите о себе" required></textarea>
+                    <div class="invalid-feedback">Пожалуйста, введите биографию.</div>
+                </div>
+            </div>
+            <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" id="check-1" required>
+                <label class="form-check-label" for="check-1">С контрактом ознакомлен(а)</label>
+                <div class="invalid-feedback">Пожалуйста, подтвердите ознакомление с контрактом.</div>
+            </div>
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+        </form>
+    </div>
+
+</body>
+</html>
