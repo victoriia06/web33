@@ -172,64 +172,6 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const openFormButton = document.getElementById('openFormButton');
-            const popup = document.getElementById('popup');
-            const registrationForm = document.getElementById('registrationForm');
-            const messageDiv = document.getElementById('message');
 
-            // Открыть попап
-            openFormButton.addEventListener('click', () => {
-                showPopup();
-            });
-
-            // Закрыть попап при нажатии Back
-            window.addEventListener('popstate', () => {
-                if (popup.classList.contains('active')) closePopup();
-            });
-
-            // Показать попап и обновить URL
-            function showPopup() {
-                popup.classList.add('active');
-                history.pushState({ popup: true }, '', '#registration');
-            }
-
-            // Закрыть попап и обновить URL
-            function closePopup() {
-                popup.classList.remove('active');
-                history.pushState(null, '', window.location.pathname);
-            }
-
-            // Отправка данных
-            registrationForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-
-                const formData = new FormData(registrationForm);
-                try {
-                    const response = await fetch('https://formcarry.com/s/pKrct8nT-YP', {
-                        method: 'POST',
-                        headers: {
-                            'Accept': 'application/json',
-                        },
-                        body: formData,
-                    });
-
-                    if (!response.ok) {
-                        const errorText = await response.text();
-                        console.error('Ошибка:', response.status, errorText);
-                        alert('Ошибка!');
-                    } else {
-                        const result = await response.json();
-                        registrationForm.reset();
-                        closePopup();
-                        alert('Регистрация успешна!');
-                    }
-                } catch (error) {
-                    alert('Ошибка!');
-                }
-            });
-        });
-    </script>
 </body>
 </html>
