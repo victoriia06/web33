@@ -148,17 +148,5 @@
         <div class="message" id="message"></div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const registrationForm = document.getElementById('registrationForm');
-            const messageDiv = document.getElementById('message');
-
-            // Отправка данных
-            registrationForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                alert('Форма отправлена! В реальном приложении здесь будет отправка на сервер');
-            });
-        });
-    </script>
 </body>
 </html>
