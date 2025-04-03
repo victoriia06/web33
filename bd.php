@@ -63,9 +63,10 @@ $db = new PDO('mysql:host=localhost;dbname=u47560', $user, $pass, array(PDO::ATT
 
 // Подготовленный запрос. Не именованные метки.
 try {
-    $stmt = $db->prepare("INSERT INTO my_table SET fio = ?, email = ?, date = ?, gender = ?, plang = ?, bio = ?");
+    $stmt = $db->prepare("INSERT INTO my_table SET fio = ?, tel = ?, email = ?, date = ?, gender = ?, plang = ?, bio = ?");
     $stmt->execute(array(
          $_POST['fio'],
+         $_POST['tel'],
          $_POST['email'],
          $_POST['date'],
          $_POST['gender'],
