@@ -1,0 +1,15 @@
+CREATE TABLE my_table (
+id INT(10) unsigned NOT NULL AUTO_INCREMENT,
+fio VARCHAR(128),
+tel NUMBER(30),
+email VARCHAR(30),
+gender VARCHAR(10),
+biography TEXT,
+PRIMARY KEY(id)
+);
+
+CREATE TABLE plang(
+id INT(10) unsigned NOT NULL AUTO_INCREMENT,
+name VARCHAR(128),
+PRIMARY KEY(id)
+);
