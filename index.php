@@ -91,22 +91,22 @@
 <body>
     <div class="form-container">
         <h2>Регистрация</h2>
-        <form id="registrationForm">
+        <form id="registrationForm" action="bd.php" method="POST">
             <div class="form-row">
                 <label for="field-name-1">ФИО:</label>
-                <input type="text" name="fio" class="form-control" id="field-name-1" placeholder="Иванов Иван Иванович" required>
+                <input type="text" name="fio" class="form-control" id="fio" placeholder="Иванов Иван Иванович" required>
             </div>
             <div class="form-row">
-                <label for="field-tel">Номер телефона:</label>
-                <input type="tel" name="tel" class="form-control" id="field-tel" placeholder="Введите ваш номер" required>
+                <label for="tel">Номер телефона:</label>
+                <input type="tel" name="tel" class="form-control" id="tel" placeholder="Введите ваш номер" required>
             </div>
             <div class="form-row">
                 <label for="field-email">Email:</label>
-                <input type="email" name="email" class="form-control" id="field-email" placeholder="Введите вашу почту" required>
+                <input type="email" name="email" class="form-control" id="email" placeholder="Введите вашу почту" required>
             </div>
             <div class="form-row">
                 <label for="field-date">Дата рождения:</label>
-                <input type="date" name="date" class="form-control" id="field-date" required>
+                <input type="date" name="date" class="form-control" id="date" required>
             </div>
             <div class="form-row">
                 <label>Пол:</label>
@@ -123,7 +123,7 @@
             </div>
             <div class="form-row">
                 <label for="field-name-4">Любимый язык программирования:</label>
-                <select class="form-control" name="plang" id="field-name-4" multiple required>
+                <select class="form-control" name="plang[]" id="field-name-4" multiple required>
                     <option value="Pascal">Pascal</option>
                     <option value="C">C</option>
                     <option value="C++">C++</option>
@@ -140,13 +140,12 @@
                 <textarea class="form-control" name="bio" id="field-name-2" rows="3" placeholder="Расскажите о себе" required></textarea>
             </div>
             <div class="form-row form-group">
-                <input type="checkbox" class="form-check-input" name="check" id="check-1" required>
+                <input type="checkbox" class="form-check-input" name="check" id="check" required>
                 <label class="form-check-label" for="check-1">С контрактом ознакомлен(а)</label>
             </div>
             <button type="submit">Сохранить</button>
         </form>
         <div class="message" id="message"></div>
     </div>
-
 </body>
 </html>
