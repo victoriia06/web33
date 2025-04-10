@@ -1,93 +1,103 @@
 <?php
-// Отправляем браузеру правильную кодировку,
-// файл index.php должен быть в кодировке UTF-8 без BOM.
 header('Content-Type: text/html; charset=UTF-8');
 
-// В суперглобальном массиве $_SERVER PHP сохраняет некторые заголовки запроса HTTP
-// и другие сведения о клиненте и сервере, например метод текущего запроса $_SERVER['REQUEST_METHOD'].
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-    // В суперглобальном массиве $_GET PHP хранит все параметры, переданные в текущем запросе через URL.
     if (!empty($_GET['save'])) {
-        // Если есть параметр save, то выводим сообщение пользователю.
         print('Спасибо, результаты сохранены!');
     }
-    // Включаем содержимое файла index.php.
     include('index.php');
-    // Завершаем работу скрипта.
     exit();
 }
-// Иначе, если запрос был методом POST, т.е. нужно проверить данные и сохранить их в XML-файл.
-// Проверяем ошибки.
+
+// Validate inputs
 $errors = FALSE;
-if (empty($_POST['fio'])) {
-    print('заполни фио.<br/>');
+if (empty($_POST['fio']) || !preg_match('/^[а-яА-ЯёЁa-zA-Z\s]+$/u', $_POST['fio']) || strlen($_POST['fio']) > 150) {
+    print('Пожалуйста, введите корректное ФИО (только буквы и пробелы, не более 150 символов).<br/>');
     $errors = TRUE;
 }
-if (!preg_match("/@/",$_POST['tel'])) {
-    print('заполни телефон.<br/>');
+
+if (empty($_POST['tel']) || !preg_match('/^[\d\s\-\+\(\)]+$/', $_POST['tel'])) {
+    print('Пожалуйста, введите корректный номер телефона.<br/>');
     $errors = TRUE;
 }
-if (!preg_match("/@/",$_POST['email'])) {
-    print('заполни email.<br/>');
+
+if (empty($_POST['email']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+    print('Пожалуйста, введите корректный email.<br/>');
     $errors = TRUE;
 }
-if ($_POST['date'] == "date") {
-    print('выбери дату рождения.<br/>');
+
+if (empty($_POST['date']) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $_POST['date'])) {
+    print('Пожалуйста, выберите корректную дату рождения.<br/>');
     $errors = TRUE;
 }
-if (empty($_POST['gender'])) {
-    print('выбери пол.<br/>');
+
+if (empty($_POST['gender']) || !in_array($_POST['gender'], ['male', 'female'])) {
+    print('Пожалуйста, выберите пол.<br/>');
     $errors = TRUE;
 }
-if (empty($_POST['plang'])) {
-    print('выбери любимый язык программирования.<br/>');
+
+if (empty($_POST['plang']) || !is_array($_POST['plang'])) {
+    print('Пожалуйста, выберите хотя бы один язык программирования.<br/>');
     $errors = TRUE;
 }
-if (empty($_POST['bio'])) {
-    print('расскажи о себе.<br/>');
+
+if (empty($_POST['bio']) || strlen($_POST['bio']) > 500) {
+    print('Пожалуйста, напишите биографию (не более 500 символов).<br/>');
     $errors = TRUE;
 }
+
 if (empty($_POST['check'])) {
-    print('ознакомься с политикой конфиденциальности.<br/>');
+    print('Пожалуйста, подтвердите ознакомление с контрактом.<br/>');
     $errors = TRUE;
 }
 
 if ($errors) {
-    // При наличии ошибок завершаем работу скрипта.
     exit();
 }
 
-$user = 'u70422';
-$pass = '4545635';
-$db = new PDO('mysql:host=localhost;dbname=u47560', $user, $pass, array(PDO::ATTR_PERSISTENT => true));
+// Database connection
+$user = 'u70422'; // replace with your username
+$pass = '4545635'; // replace with your password
+$dbname = 'u70422'; // replace with your database name
 
-// Подготовленный запрос. Не именованные метки.
 try {
-    $stmt = $db->prepare("INSERT INTO my_table SET fio = ?, tel = ?, email = ?, date = ?, gender = ?, plang = ?, bio = ?");
-    $stmt->execute(array(
-         $_POST['fio'],
-         $_POST['tel'],
-         $_POST['email'],
-         $_POST['date'],
-         $_POST['gender'],
-         $_POST['plang'],
-         $_POST['bio'],
-    ));  
-   
-    $stmt = $db->prepare("INSERT INTO plang SET fio = ?");
-    $stmt->execute(array(
-        $_POST['plang'] = implode(', ', $_POST['plang']),
-    ));
-} 
-catch (PDOException $e) {
-    print('Error : ' . $e->getMessage());
+    $db = new PDO("mysql:host=localhost;dbname=$dbname", $user, $pass, [
+        PDO::ATTR_PERSISTENT => true,
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+    ]);
+    
+    // Insert main application data
+    $stmt = $db->prepare("INSERT INTO applications (fio, tel, email, birth_date, gender, bio) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->execute([
+        $_POST['fio'],
+        $_POST['tel'],
+        $_POST['email'],
+        $_POST['date'],
+        $_POST['gender'],
+        $_POST['bio']
+    ]);
+    
+    $applicationId = $db->lastInsertId();
+    
+    // Insert programming languages
+    $stmt = $db->prepare("INSERT INTO application_languages (application_id, language_id) VALUES (?, ?)");
+    foreach ($_POST['plang'] as $language) {
+        // First, get or insert language to get its ID
+        $langStmt = $db->prepare("SELECT id FROM programming_languages WHERE name = ?");
+        $langStmt->execute([$language]);
+        $langId = $langStmt->fetchColumn();
+        
+        if (!$langId) {
+            $langStmt = $db->prepare("INSERT INTO programming_languages (name) VALUES (?)");
+            $langStmt->execute([$language]);
+            $langId = $db->lastInsertId();
+        }
+        
+        $stmt->execute([$applicationId, $langId]);
+    }
+    
+    header('Location: ?save=1');
+} catch (PDOException $e) {
+    print('Error: ' . $e->getMessage());
     exit();
 }
-
-//  stmt - это "дескриптор состояния".
-
-// Делаем перенаправление.
-// Если запись не сохраняется, но ошибок не видно, то можно закомментировать эту строку чтобы увидеть ошибку.
-// Если ошибок при этом не видно, то необходимо настроить параметр display_errors для PHP.
-header('Location: ?save=1');
-?>
