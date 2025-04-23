@@ -56,9 +56,9 @@ if ($errors) {
 }
 
 // Database connection
-$user = 'u70422'; // replace with your username
-$pass = '4545635'; // replace with your password
-$dbname = 'u70422'; // replace with your database name
+$user = 'uXXXXX'; // replace with your username
+$pass = 'YYYYYYY'; // replace with your password
+$dbname = 'uXXXXX'; // replace with your database name
 
 try {
     $db = new PDO("mysql:host=localhost;dbname=$dbname", $user, $pass, [
